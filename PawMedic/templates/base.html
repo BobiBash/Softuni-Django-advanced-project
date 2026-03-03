@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% load tailwind_cli %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PawMedic</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-100">
+    <div class="mx-0 w-full h-full">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
