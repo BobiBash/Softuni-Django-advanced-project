@@ -1,1 +1,9 @@
 {% extends 'accounts/register_base.html' %}
+
+{% block extra_fields %}
+    <div class="mb-4 w-57">
+        <label class="text-lg">{{ form.phone.label }}</label>
+        <p class="border rounded-sm w-57 p-1">{{ form.phone }}</p>
+        {{ form.phone.errors }}
+    </div>
+{% endblock %}
