@@ -13,6 +13,7 @@ class EmailOrUsernameBackend(ModelBackend):
                 user = UserModel.objects.get(username=username)
             except UserModel.DoesNotExist:
                 return None
-        if user.check_password(password) and self.user_can_authenticate(user):
+        if user.check_password(password):
             return user
         return None
+

@@ -35,7 +35,13 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'accounts.PawMedicUser'
 
-AUTHENTICATION_BACKENDS = ['accounts.backends.EmailOrUsernameBackend']
+# email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
+                           'accounts.backends.EmailOrUsernameBackend',]
 
 APPS = ['accounts', 'common',
         'forum', 'notifications',
@@ -49,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_tailwind_cli',
+    'simple_email_confirmation',
 ] + APPS
 
 MIDDLEWARE = [

@@ -1,4 +1,6 @@
+from django.contrib.auth import get_user_model, get_user
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
+from django.core.exceptions import ValidationError
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 from .models import PawMedicUser
@@ -40,7 +42,7 @@ class RegistrationForm(UserCreationForm):
 class LoginForm(AuthenticationForm):
     error_messages = {
         'invalid_login': "Invalid username/email or password.",
-        'inactive': "This account is inactive.",
+        'inactive': "Please confirm your email.",
     }
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -53,6 +55,11 @@ class LoginForm(AuthenticationForm):
         self.fields['password'].error_messages = {
             'required': 'Please enter your password.',
         }
+
+    def confirm_login_allowed(self, user):
+        if not user.is_active:
+            raise ValidationError(self.error_messages['inactive'],
+                                  code='inactive',)
 
 
 
