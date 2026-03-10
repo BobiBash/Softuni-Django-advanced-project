@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="border rounded-sm h-120 w-100 flex flex-col justify-center items-center bg-white shadow-2xl">
+    <div class="my-auto flex flex-col gap-8 font-semibold">
+        {% block fields %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
