@@ -1,0 +1,30 @@
+{% extends 'accounts/profile_card.html' %}
+
+{% block context %}
+{% block fields %}
+    <h1 class="text-3xl flex justify-center mb-6 font-medium">Your Profile</h1>
+    <div class="flex flex-row gap-2">
+        <label class="font-light">Username: </label>
+        <p>{{ user.username }}</p>
+    </div>
+    <div class="flex flex-row gap-2">
+        <label class="font-light">Email: </label>
+        <p>{{ user.email }}</p>
+    </div>
+    <div class="flex flex-row gap-2">
+        <label class="font-light">Joined On: </label>
+        <p>{{ user.date_joined|date:"d/m/Y" }}</p>
+    </div>
+    <div class="flex flex-row gap-2">
+        <label class="font-light">Phone Number: </label>
+        <p>{{ user.phone }}</p>
+    </div>
+    <p>Rating</p>
+
+    <form method="post" action="{% url 'logout' %}"
+          class="mx-auto bg-slate-400 text-xl flex justify-center border p-2 rounded-sm w-30">
+        {% csrf_token %}
+        <button type="submit" class="hover:cursor-pointer">Logout</button>
+    </form>
+{% endblock %}
+{% endblock %}
