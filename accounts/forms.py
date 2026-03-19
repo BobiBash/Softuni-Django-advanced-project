@@ -1,12 +1,10 @@
-from django.contrib.auth import get_user_model, get_user
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField, UserChangeForm, \
-    PasswordResetForm
+    PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.core.exceptions import ValidationError
-from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
+from .mixins import PasswordValidationMixin
 from .models import PawMedicUser
 from .validators import validate_password_strength, validate_username_taken
-from .choices import PawMedicUserType
 
 
 class RegistrationForm(UserCreationForm):
@@ -65,4 +63,8 @@ class VetProfileForm(UserChangeForm):
 class PawMedicUserPasswordReset(PasswordResetForm):
     ...
 
+class PawMedicPasswordResetForm(PasswordValidationMixin, SetPasswordForm):
+    pass
 
+class PawMedicPasswordChangeForm(PasswordValidationMixin,PasswordChangeForm):
+    pass

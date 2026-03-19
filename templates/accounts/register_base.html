@@ -3,7 +3,6 @@
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/errorstyling.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@26.7.6/build/css/intlTelInput.css">
 <style>
     .iti__dropdown-content {
@@ -28,7 +27,8 @@
         </div>
         <div class="flex flex-col items-start mb-2 w-60">
             <label class="text-lg">{{ form.password1.label }}</label>
-            <div class="border rounded-sm w-60 p-1 flex">{{ form.password1 }}
+            <div class="border rounded-sm w-60 p-1 flex">
+                {{ form.password1 }}
                 <button id="TogglePassword" class="ml-5" type="button">
                     <i id="pass-icon" class="fa-solid fa-eye"></i>
                 </button>
@@ -37,7 +37,8 @@
         </div>
         <div class="mb-4 w-60">
             <label class="text-lg">{{ form.password2.label }}</label>
-            <div class="border rounded-sm w-60 p-1 flex">{{ form.password2 }}
+            <div class="border rounded-sm w-60 p-1 flex">
+                {{ form.password2 }}
                 <button id="TogglePassword2" class="ml-5" type="button">
                     <i id="pass-icon2" class="fa-solid fa-eye"></i>
                 </button>

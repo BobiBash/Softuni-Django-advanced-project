@@ -13,6 +13,7 @@ from django.views.generic import CreateView, TemplateView
 
 from .choices import PawMedicUserType
 from .forms import RegistrationForm, LoginForm
+from .mixins import AnonymousRequiredMixin
 from .models import PawMedicUser, EmailConfirmation
 
 
@@ -127,6 +128,8 @@ class VetProfileView(LoginRequiredMixin, TemplateView):
         context['profile'] = user
         return context
 
+class PawMedicPasswordResetView(AnonymousRequiredMixin, PasswordResetView):
+    template_name = 'accounts/password_reset_form.html'
 
 
 
