@@ -7,7 +7,7 @@
 {% endblock %}
 {% block content %}
 <form method="post" novalidate class="container mx-auto px-4 py-8">
-    <div class="flex flex-col justify-center align-middle w-100 items-center gap-4 mx-auto bg-white p-12 rounded shadow">
+    <div class="flex flex-col justify-center items-center align-middle w-100 items-center gap-4 mx-auto bg-white p-12 rounded shadow">
         <h1 class="text-2xl font-semibold mb-8">Sign in</h1>
         {% csrf_token %}
         <div class="mb-4 w-57">
@@ -30,6 +30,7 @@
 
          <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Login</button>
         <a href="{% url 'register' %}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Don't have an account?</a>
+        <a href="{% url 'password-reset' %}">Forgot your password?</a>
     </div>
 </form>
 <script src="{% static 'password_eye.js' %}"></script>

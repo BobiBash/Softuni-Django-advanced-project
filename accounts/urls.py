@@ -10,6 +10,16 @@ urlpatterns = [
     path('register-vet/', views.RegisterVetView.as_view(), name='register_vet'),
     path('login/', views.LoginUserView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(next_page='login'), name='logout'),
+    path('password-change/',
+         auth_views.PasswordChangeView.as_view(
+             template_name='accounts/password_change_form.html'
+         ),
+         name='password_change'),
+    path('password-change-complete/',
+         auth_views.PasswordChangeDoneView.as_view(
+             template_name='accounts/password_change_complete.html'
+         ),
+         name='password_change_done'),
     path('password-reset/',
          auth_views.PasswordResetView.as_view(
              template_name='accounts/password_reset_form.html'),
@@ -22,7 +32,7 @@ urlpatterns = [
          auth_views.PasswordResetConfirmView.as_view(
              template_name='accounts/password_reset_confirm.html'),
          name='password_reset_confirm'),
-    path('password-change/',
+    path('password-reset-complete/',
          auth_views.PasswordResetCompleteView.as_view(
              template_name='accounts/password_reset_complete.html'),
          name='password_reset_complete'),

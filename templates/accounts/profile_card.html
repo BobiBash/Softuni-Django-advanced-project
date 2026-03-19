@@ -3,8 +3,31 @@
 {% block content %}
 <div class="border rounded-sm h-120 w-100 flex flex-col justify-center items-center bg-white shadow-2xl">
     <div class="my-auto flex flex-col gap-8 font-semibold">
-        {% block fields %}
-        {% endblock %}
+            <h1 class="text-3xl flex justify-center mb-6 font-medium">Your Profile</h1>
+    <div class="flex flex-row gap-2">
+        <label class="font-light">Username: </label>
+        <p>{{ user.username }}</p>
+    </div>
+    <div class="flex flex-row gap-2">
+        <label class="font-light">Email: </label>
+        <p>{{ user.email }}</p>
+    </div>
+    <div class="flex flex-row gap-2">
+        <label class="font-light">Joined On: </label>
+        <p>{{ user.date_joined|date:"d/m/Y" }}</p>
+    </div>
+    <div class="flex flex-row gap-2">
+        <label class="font-light">Phone Number: </label>
+        <p>{{ user.phone }}</p>
+    </div>
+    {% block fields %}
+    {% endblock %}
+
+    <form method="post" action="{% url 'logout' %}"
+          class="mx-auto bg-slate-400 text-xl flex justify-center border p-2 rounded-sm w-30">
+        {% csrf_token %}
+        <button type="submit" class="hover:cursor-pointer">Logout</button>
+    </form>
     </div>
 </div>
 {% endblock %}
