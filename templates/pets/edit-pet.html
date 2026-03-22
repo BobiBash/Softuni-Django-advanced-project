@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'common/profile_navbar.html' %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        <p>{{ form.name }}</p>
+        <p>{{ form.species }}</p>
+        <p>{{ form.breed }}</p>
+        <p>{{ form.date_of_birth }}</p>
+        <p>{{ form.pet_photo }}</p>
+    </div>
+    <button type="submit">Submit Change</button>
+</form>
+{% endblock %}

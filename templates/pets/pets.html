@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% include 'accounts/profile_navbar.html' %}
+{% include 'common/profile_navbar.html' %}
+<div class="flex gap-4 w-200">
+    {% for pet in object_list %}
+        <a class="flex flex-col border p-8" href="{% url 'view-pet' pet.id %}">
+            <p>{{ pet.name }}</p>
+            <p>{{ pet.species }}</p>
+            <p>{{ pet.breed }}</p>
+            <p>{{ pet.date_of_birth }}</p>
+            <p>{{ pet.pet_photo }}</p>
+            <a href="{% url 'edit-pet' pet.id %}">Edit pet</a>
+            <a href="{% url 'delete-pet' pet.id %}">Delete pet</a>
+        </a>
+    {% endfor %}
+</div>
+    <div>
+        <a href="{% url 'add-pet' %}">Add Pet</a>
+    </div>
+
 {% endblock %}

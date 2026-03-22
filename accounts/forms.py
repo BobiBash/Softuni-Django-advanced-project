@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField, UserChangeForm, \
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, \
     PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.core.exceptions import ValidationError
 

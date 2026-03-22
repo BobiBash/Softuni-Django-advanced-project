@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'common/profile_navbar.html' %}
+<div>
+    <p>{{ object.owner.username }}</p>
+    <p>{{ object.name }}</p>
+    <p>{{ object.species }}</p>
+    <p>{{ object.breed }}</p>
+    <p>{{ object.date_of_birth }}</p>
+    <p>{{ object.pet_photo }}</p>
+</div>
+{% endblock %}
