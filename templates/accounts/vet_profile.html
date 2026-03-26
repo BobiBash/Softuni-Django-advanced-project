@@ -4,38 +4,66 @@
     {% if vet.photo %}
         <form method="POST" action="{% url 'update-vet-photo' %}" enctype="multipart/form-data">
             {% csrf_token %}
-            <img class="h-25 w-25 mx-auto" src="{{ vet.photo.url }}">
-            <input type="file" name="photo" accept="image/*" id="photo-input" class="hidden"
-                   onchange="this.form.submit()">
-            <label for="photo-input" class="flex justify-center">Change Photo</label>
+            <div class="flex flex-col">
+                <img id="ImagePreview" class="h-30 w-30 rounded-full" src="{{ vet.photo.url }}">
+            </div>
         </form>
     {% else %}
         <form method="POST" action="{% url 'update-vet-photo' %}" enctype="multipart/form-data">
             {% csrf_token %}
                     <div class="h-25 w-25 mx-auto rounded-sm border bg-gray-100 flex items-center justify-center text-gray-400">No photo</div>
-            <input type="file" name="photo" accept="image/*" id="photo-input" class="hidden"
-                   onchange="this.form.submit()">
-            <label for="photo-input" class="flex justify-center">Change Photo</label>
         </form>
     {% endif %}
 {% endblock %}
-
+{% block change_pic_button %}
+<input type="file" name="photo" accept="image/*" id="photo-input" class="hidden"
+       onchange="this.form.submit()">
+<label class="flex justify-center items-center p-1 rounded-sm bg-gray-300 text-sm border" for="photo-input">Change Photo</label>
+{% endblock %}
 
 {% block fields %}
     <div class="flex flex-row gap-2">
         <label class="font-light">Specialization: </label>
         <p>{{ vet.specialization }}</p>
     </div>
-    <form method="POST" action="{% url 'update-vet-bio' %}">
-        {% csrf_token %}
-        <div class="flex flex-row gap-2 justify-start">
-            <label class="font-light">Bio: </label>
-            <textarea class="border rounded-sm" name="bio" rows="3" style="resize:none">{{ vet.bio }}</textarea>
-            <button type="submit">Save</button>
-        </div>
-    </form>
     <div class="flex flex-row gap-2">
         <label class="font-light">Years of experience: </label>
         <p>{{ vet.years_of_experience }}</p>
     </div>
+{% endblock %}
+
+{% block biography %}
+    <form method="POST" action="{% url 'update-vet-bio' %}">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 w-125">
+            <label class="font-light">Biography: </label>
+            <textarea onchange="this.form.submit()" class="border border-gray-600 mb-6 rounded-sm p-2" name="bio" rows="3" style="resize:none">{{ vet.bio }}</textarea>
+        </div>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const input = document.getElementById('photo-input')
+    const preview = document.getElementById('ImagePreview')
+
+    function readAndPreview(file) {
+        const reader = new FileReader();
+
+        reader.addEventListener('load', function () {
+        preview.src = reader.result;
+        });
+
+        reader.readAsDataURL(file);
+    }
+
+    input.addEventListener('change', function () {
+        const file = input.files[0]
+        if (file) {
+            readAndPreview(file);
+        }
+    })
+
+</script>
+
 {% endblock %}

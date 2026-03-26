@@ -3,40 +3,74 @@
 
 {% block content %}
 {% include 'common/profile_navbar.html' %}
-<div class="border rounded-sm p-8 w-100 flex flex-col justify-center items-center bg-white shadow-2xl">
-    <div class="my-auto flex flex-col gap-4 font-semibold">
-            <h1 class="text-3xl flex justify-center mb-6 font-medium">Your Profile</h1>
-
-    {% block profile_pic %}{% endblock %}
-
-    <div class="flex flex-row gap-2">
-        <label class="font-light">Username: </label>
-        <p>{{ user.username }}</p>
-    </div>
-    <div class="flex flex-row gap-2">
-        <label class="font-light">Email: </label>
-        <p>{{ user.email }}</p>
-    </div>
-    <div class="flex flex-row gap-2">
-        <label class="font-light">Joined On: </label>
-        <p>{{ user.date_joined|date:"d/m/Y" }}</p>
-    </div>
-    <div class="flex flex-row gap-2">
-        <label class="font-light">Phone Number: </label>
-        {% if user.phone %}
-            <p>{{ user.phone }}</p>
-        {% else %}
-            <p></p>
-        {% endif %}
-    </div>
-    {% block fields %}
-    {% endblock %}
-
-    <form method="post" action="{% url 'logout' %}"
-          class="mx-auto bg-slate-400 text-xl flex justify-center border p-2 rounded-sm w-30">
-        {% csrf_token %}
-        <button type="submit" class="hover:cursor-pointer">Logout</button>
-    </form>
+<div class="mt-8 rounded-sm w-140 gap-4 bg-white shadow-2xl">
+    <!-- Top Section -->
+    <div class="flex flex-col">
+        <div class="flex gap-4 px-8 py-4 border-b border-gray-500">
+            <div class="flex flex-col gap-2">
+                {% block profile_pic %}{% endblock %}
+                {% block change_pic_button %}{% endblock %}
+            </div>
+            <div class="flex flex-col gap-2 mt-5">
+                <div class="flex flex-row text-2xl">
+                    <p>{{ user.username }}</p>
+                </div>
+                <div class="flex flex-row gap-2">
+                    <label class="font-light">Joined On </label>
+                    <p>{{ user.date_joined|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+        </div>
+    <!-- Middle Section -->
+        <h1 class="text-gray-400 text-lg ml-8 mt-5">Account</h1>
+        <div class="px-8 py-4">
+            <div class="grid grid-cols-2 gap-2 border-b py-2 border-gray-300">
+                        <div class="flex flex-row gap-2">
+                <label class="font-light">First Name </label>
+                <p>{{ user.first_name }}</p>
+                </div>
+                    <div class="flex flex-row gap-2">
+                    <label class="font-light">Last Name </label>
+                    <p>{{ user.last_name }}</p>
+                </div>
+                <div class="flex flex-row gap-2">
+                    <label class="font-light">Email </label>
+                    <p>{{ user.email }}</p>
+                </div>
+                <div class="flex flex-row gap-2 mb-6">
+                    <label class="font-light">Phone Number </label>
+                    {% if user.phone %}
+                        <p>{{ user.phone }}</p>
+                    {% else %}
+                        <p></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    <!-- Bottom Section -->
+        <h1 class="text-gray-400 text-lg ml-8 mt-5">Vet Profile</h1>
+        <div class="px-8 py-4">
+            <div class="grid grid-cols-2 gap-2 py-2">
+              {% block fields %}
+              {% endblock %}
+            </div>
+            <div class="py-2 border-gray-300 border-b">
+                {% block biography %}
+                {% endblock %}
+            </div>
+        </div>
+        <footer class="flex my-4 mx-6 justify-between ">
+            <form method="post" action="{% url 'logout' %}"
+            class=" bg-slate-400 flex border py-1 px-2 rounded-sm w-fit">
+            {% csrf_token %}
+            <button type="submit" class="hover:cursor-pointer">Publish</button>
+            </form>
+            <form method="post" action="{% url 'logout' %}"
+            class=" bg-slate-400 flex border py-1 px-2 rounded-sm w-fit">
+            {% csrf_token %}
+            <button type="submit" class="hover:cursor-pointer">Logout</button>
+            </form>
+        </footer>
     </div>
 </div>
 {% endblock %}

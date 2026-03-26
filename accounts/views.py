@@ -1,10 +1,7 @@
 from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
+from django.contrib.auth.views import LoginView, PasswordResetView, LogoutView
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -14,7 +11,7 @@ from django.views.generic import CreateView, TemplateView
 from .choices import PawMedicUserType
 from .forms import RegistrationForm, LoginForm, VetProfileForm
 from .mixins import AnonymousRequiredMixin
-from .models import PawMedicUser, EmailConfirmation, VetProfile
+from .models import EmailConfirmation, VetProfile
 
 
 # Create your views here.
@@ -24,6 +21,7 @@ class RegisterView(CreateView):
     form_class = RegistrationForm
     success_url = reverse_lazy('home')
 
+    # check if user is authenticated
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('home')
@@ -147,6 +145,7 @@ class PawMedicPasswordResetView(AnonymousRequiredMixin, PasswordResetView):
 
 
 class UpdateProfilePhotoView(LoginRequiredMixin, View):
+
     def post(self, request):
         vet = request.user.vet_profile
         vet.photo = request.FILES.get('photo')

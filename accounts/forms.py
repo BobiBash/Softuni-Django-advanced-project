@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, User
 from django.core.exceptions import ValidationError
 from django import forms
 
+from .choices import PawMedicUserType
 from .mixins import PasswordValidationMixin
 from .models import PawMedicUser, VetProfile
 from .validators import validate_password_strength, validate_username_taken
@@ -11,7 +12,7 @@ from .validators import validate_password_strength, validate_username_taken
 class RegistrationForm(UserCreationForm):
     class Meta:
         model = PawMedicUser
-        fields = ('username', 'email', 'password1', 'password2', 'phone')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'phone')
 
 
     def __init__(self, *args, role=None, **kwargs):

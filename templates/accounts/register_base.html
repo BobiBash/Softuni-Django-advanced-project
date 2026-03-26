@@ -21,6 +21,16 @@
             {{ form.username.errors }}
         </div>
         <div class="mb-4 w-60">
+            <label class="text-lg">{{ form.first_name.label }}</label>
+            <p class="border rounded-sm w-60 p-1">{{ form.first_name }}</p>
+            {{ form.first_name.errors }}
+        </div>
+        <div class="mb-4 w-60">
+            <label class="text-lg">{{ form.last_name.label }}</label>
+            <p class="border rounded-sm w-60 p-1">{{ form.last_name }}</p>
+            {{ form.last_name.errors }}
+        </div>
+        <div class="mb-4 w-60">
             <label class="text-lg">{{ form.email.label }}</label>
             <p class="border rounded-sm w-60 p-1">{{ form.email }}</p>
             {{ form.email.errors }}

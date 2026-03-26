@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-2 gap-4 flex flex-col m-10">
+  {% for object in object_list %}
+  <div class="border rounded-sm p-2 flex h-60 w-150 gap-4 bg-orange-100">
+    <div class="flex flex-col">
+      <div class="flex flex-row justify-center gap-2 font-semibold text-lg">
+        <p>{{ object.user.first_name }}</p>
+        <p>{{ object.user.last_name }}</p>
+      </div>
+      {% if object.photo %}
+        <img class="mt-3 border-2 rounded-sm h-45 w-40" src="{{ object.photo.url }}">
+      {% endif %}
+    </div>
+    <div class="my-auto w-100 gap-2 flex flex-col flex-wrap">
+      <div>
+        <label class="text-xl font-semibold">Specialization </label>
+        <p>{{ object.specialization }}</p>
+      </div>
+      <div>
+        <label class="text-xl font-semibold">Years of experience</label>
+        <p>{{ object.years_of_experience }}</p>
+      </div>
+      <div>
+      <label  class="text-xl font-semibold">Biography</label>
+        <p class="w-100 overflow-hidden text-ellipsis">{{ object.bio }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  <div class="inline mx-auto gap-2">
+    {% if page_obj.has_previous %}
+      <a class="border py-1 px-2 rounded-sm bg-gray-200" href="?page=1">First</a>
+      <a class="border py-1 px-2 rounded-sm bg-gray-200" href="?page={{ page_obj.prev_page_number }}">Previous</a>
+      {% endif %}
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      {% if page_obj.has_next %}
+      <a class="border py-1 px-2 rounded-sm bg-gray-200" href="?page={{ page_obj.next_page_number }}">Next</a>
+      <a class="border py-1 px-2 rounded-sm bg-gray-200" href="?page=last">Last</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
