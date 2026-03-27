@@ -17,14 +17,16 @@ class VetScheduleView(LoginRequiredMixin, View):
     })
 
     def post(self, request):
-        print(request.POST )
+        vet_id = request.user.vet_profile.id
+        print(vet_id)
         date = request.POST.get('date')
         times = request.POST.getlist('time')
+        AppointmentSlot.objects.filter(vet_id=vet_id).delete()
 
         for time in times:
             AppointmentSlot.objects.get_or_create(
                 date=date,
                 time=time,
-                vet_id=request.user.vet_profile
+                vet_id=vet_id
             )
         return redirect('vet-schedule')
