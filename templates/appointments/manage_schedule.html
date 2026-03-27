@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form class="border bg-gray-200 rounded-sm pt-20 pb-10 px-10 flex flex-col items-center gap-4 w-100" method="post" action="{% url 'vet-schedule' %}">
+  {% csrf_token %}
+  <label class="bg-white relative self-start -ml-10 -mt-20 border-b border-r rounded-sm w-fit"><input type="text" name="date" id="date-input" placeholder="Pick a date"></label>
+  <h1 class="text-2xl" id="header"></h1>
+  <div class="grid grid-flow-col grid-rows-5 gap-x-4 gap-y-2" id="time-slots">
+  </div>
+  <button class="bg-blue-400 border rounded-sm py-1 px-2" type="submit">Save</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  config =
+      {
+          minDate: 'today',
+          maxDate: new Date().fp_incr(61),
+          altInput: true,
+          altFormat: "F j, Y",
+          dateFormat: "Y-m-d",
+      }
+
+  fp = flatpickr("#date-input", config);
+
+  const ALL_SLOTS = ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']
+  const slotsDiv = document.getElementById('time-slots')
+  const header = document.getElementById('header')
+  const ChosenDate = document.getElementById('date-input')
+
+  console.log(ChosenDate.value)
+
+
+  ALL_SLOTS.forEach((timestamp) => {
+    slotsDiv.innerHTML += `<label class="text-xl"><input type='checkbox' name='time' value='${timestamp}'/>${timestamp}</label>`
+  })
+
+  ChosenDate.addEventListener('input', function () {
+    header.textContent = 'Schedule for ' + fp.altInput.value
+  });
+
+  const savedSlots = {{ slots|safe }};
+  console.log(savedSlots)
+  savedSlots.forEach((slot) => {
+      if (ChosenDate === slot.date) {
+
+      }
+  })
+
+</script>
+{% endblock %}

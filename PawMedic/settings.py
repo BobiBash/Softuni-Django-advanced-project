@@ -48,7 +48,7 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
 
 APPS = ['accounts', 'common',
         'forum', 'notifications',
-        'pets', 'shop', 'vets']
+        'pets', 'shop', 'vets', 'appointments',]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_tailwind_cli',
+    "rest_framework",
 ] + APPS
 
 MIDDLEWARE = [

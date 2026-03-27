@@ -51,7 +51,7 @@
     <form method="post" action="{% url 'publish-vet' %}"
     class=" bg-slate-400 flex border py-1 px-2 rounded-sm w-fit">
     {% csrf_token %}
-    {% if vet.is_published %}
+    {% if vet.is_published and vet.photo %}
         <button type="submit" class="hover:cursor-pointer">Unpublish</button>
     {% else %}
         <button type="submit" class="hover:cursor-pointer">Publish</button>

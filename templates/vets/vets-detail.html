@@ -31,7 +31,7 @@
   <!-- Right: Booking card -->
   <div class="bg-white rounded-xl border border-gray-200 p-6">
     <p class="font-medium mb-4">Book an appointment</p>
-    <form method="POST" action="{% url 'book-appointment' vet.slug %}">
+    <form method="POST" action="">
       {% csrf_token %}
       <label class="text-xs text-gray-400 block mb-1">Select pet</label>
       <select name="pet" class="w-full border border-gray-200 rounded-lg p-2 text-sm mb-4">
@@ -58,4 +58,11 @@
   </div>
 
 </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    const data = fetch('/appointments/api/slots/?vet_id=2')
+    console.log(data)
+  </script>
 {% endblock %}
