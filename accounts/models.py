@@ -1,10 +1,8 @@
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from .choices import PawMedicUserType
+from autoslug import AutoSlugField
 
 
 # Create your models here.
@@ -27,5 +25,9 @@ class VetProfile(models.Model):
     bio = models.TextField()
     photo = models.ImageField(upload_to='vet_photos/', blank=True, null=True)
     is_published = models.BooleanField(default=False)
+    slug = AutoSlugField(populate_from='get_fullname', unique=True)
+
+    def get_fullname(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 

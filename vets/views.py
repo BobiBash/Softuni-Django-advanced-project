@@ -31,3 +31,4 @@ class VetDetailView(LoginRequiredMixin, DetailView):
     template_name = 'vets/vets-detail.html'
 
 
+

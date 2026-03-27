@@ -7,10 +7,11 @@
     <!-- Top Section -->
     <div class="flex flex-col">
         <div class="flex gap-4 px-8 py-4 border-b border-gray-500">
-            <div class="flex flex-col gap-2">
+            <form method="POST" action="{% url 'update-vet-photo' %}" enctype="multipart/form-data" class="flex flex-col gap-2">
+                {% csrf_token %}
                 {% block profile_pic %}{% endblock %}
                 {% block change_pic_button %}{% endblock %}
-            </div>
+            </form>
             <div class="flex flex-col gap-2 mt-5">
                 <div class="flex flex-row text-2xl">
                     <p>{{ user.username }}</p>
@@ -48,27 +49,11 @@
             </div>
         </div>
     <!-- Bottom Section -->
-        <h1 class="text-gray-400 text-lg ml-8 mt-5">Vet Profile</h1>
-        <div class="px-8 py-4">
-            <div class="grid grid-cols-2 gap-2 py-2">
-              {% block fields %}
-              {% endblock %}
-            </div>
-            <div class="py-2 border-gray-300 border-b">
-                {% block biography %}
-                {% endblock %}
-            </div>
-        </div>
-        <footer class="flex my-4 mx-6 justify-between ">
-            <form method="post" action="{% url 'publish-vet' %}"
-            class=" bg-slate-400 flex border py-1 px-2 rounded-sm w-fit">
-            {% csrf_token %}
-            {% if vet.is_published %}
-                <button type="submit" class="hover:cursor-pointer">Unpublish</button>
-            {% else %}
-                <button type="submit" class="hover:cursor-pointer">Publish</button>
-            {% endif %}
-            </form>
+        {% block vet_bottom_section %}
+        {% endblock %}
+         <footer class="flex my-4 mx-6 justify-between">
+            {% block publish_button %}
+            {% endblock %}
             <form method="post" action="{% url 'logout' %}"
             class=" bg-slate-400 flex border py-1 px-2 rounded-sm w-fit">
             {% csrf_token %}
