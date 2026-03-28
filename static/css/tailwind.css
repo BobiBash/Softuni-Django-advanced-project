@@ -256,9 +256,6 @@
       max-width: 96rem;
     }
   }
-  .-m-8 {
-    margin: calc(var(--spacing) * -8);
-  }
   .m-8 {
     margin: calc(var(--spacing) * 8);
   }
@@ -291,9 +288,6 @@
   }
   .mt-8 {
     margin-top: calc(var(--spacing) * 8);
-  }
-  .mt-10 {
-    margin-top: calc(var(--spacing) * 10);
   }
   .mb-1 {
     margin-bottom: calc(var(--spacing) * 1);
@@ -367,6 +361,9 @@
   .h-65 {
     height: calc(var(--spacing) * 65);
   }
+  .h-80 {
+    height: calc(var(--spacing) * 80);
+  }
   .h-100 {
     height: calc(var(--spacing) * 100);
   }
@@ -414,6 +411,9 @@
   }
   .w-140 {
     width: calc(var(--spacing) * 140);
+  }
+  .w-145 {
+    width: calc(var(--spacing) * 145);
   }
   .w-150 {
     width: calc(var(--spacing) * 150);
@@ -524,14 +524,8 @@
   .gap-x-4 {
     column-gap: calc(var(--spacing) * 4);
   }
-  .gap-x-6 {
-    column-gap: calc(var(--spacing) * 6);
-  }
   .gap-y-2 {
     row-gap: calc(var(--spacing) * 2);
-  }
-  .gap-y-4 {
-    row-gap: calc(var(--spacing) * 4);
   }
   .divide-y {
     :where(& > :not(:last-child)) {
@@ -678,9 +672,6 @@
   .p-6 {
     padding: calc(var(--spacing) * 6);
   }
-  .p-8 {
-    padding: calc(var(--spacing) * 8);
-  }
   .p-12 {
     padding: calc(var(--spacing) * 12);
   }
@@ -717,20 +708,11 @@
   .py-8 {
     padding-block: calc(var(--spacing) * 8);
   }
-  .py-15 {
-    padding-block: calc(var(--spacing) * 15);
-  }
-  .py-20 {
-    padding-block: calc(var(--spacing) * 20);
-  }
   .pt-20 {
     padding-top: calc(var(--spacing) * 20);
   }
   .pb-10 {
     padding-bottom: calc(var(--spacing) * 10);
-  }
-  .pb-15 {
-    padding-bottom: calc(var(--spacing) * 15);
   }
   .text-center {
     text-align: center;

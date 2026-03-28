@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 
 from accounts.choices import PawMedicUserType
 from accounts.models import VetProfile
+from appointments.models import AppointmentSlot
 from pets.models import Pet
 
 
@@ -26,9 +27,24 @@ class VetPublishView(LoginRequiredMixin, View):
 
         return redirect('vets-list')
 
-class VetDetailView(LoginRequiredMixin, DetailView):
-    model = VetProfile
-    template_name = 'vets/vets-detail.html'
+class VetDetailView(LoginRequiredMixin, View):
+    def get(self, request, slug, pk):
+        user = request.user
+        print(user)
+        pets = Pet.objects.filter(owner_id=user.id)
+        print(user.id)
+        print(pets)
+        available_slots = AppointmentSlot.objects.filter(vet_id=pk)
+        print(pk)
+        print(available_slots)
+
+        context = {
+            'user': user,
+            'pets': pets,
+            'slots': available_slots,
+        }
+
+        return render(request, 'vets/vets-detail.html', context)
 
 
 

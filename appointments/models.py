@@ -1,6 +1,8 @@
 from django.db import models
 
 from accounts.models import VetProfile, PawMedicUser
+from pets.models import Pet
+
 
 # Create your models here.
 class AppointmentSlot(models.Model):
@@ -12,3 +14,4 @@ class AppointmentSlot(models.Model):
 class Appointment(models.Model):
     slot = models.ForeignKey(AppointmentSlot, on_delete=models.CASCADE, related_name='slots')
     owner = models.ForeignKey(PawMedicUser, on_delete=models.CASCADE, related_name='slots')
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='pet')

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form class="border bg-gray-200 rounded-sm pt-20 pb-10 px-10 flex flex-col items-center gap-4 w-100" method="post" action="{% url 'vet-schedule' %}">
+<form class="border bg-gray-200 rounded-sm pt-20 pb-10 px-10 flex flex-col items-center gap-4 w-145 h-80" method="post" action="{% url 'vet-schedule' slug=vet_slug %}">
   {% csrf_token %}
   <label class="bg-white relative self-start -ml-10 -mt-20 border-b border-r rounded-sm w-fit"><input type="text" name="date" id="date-input" placeholder="Pick a date"></label>
   <h1 class="text-2xl" id="header"></h1>
@@ -39,7 +39,9 @@
                 })
   }});
 
-  const ALL_SLOTS = ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']
+  const ALL_SLOTS = ['07:00', '07:30', '08:00', '08:30',  '09:00', '09:30',  '10:00',  '10:30',
+      '11:00', '11:30',  '12:00', '12:30',  '13:00', '13:30',  '14:00', '14:30',  '15:00', '15:30',
+      '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30',]
   const slotsDiv = document.getElementById('time-slots')
   const header = document.getElementById('header')
   const ChosenDate = document.getElementById('date-input')
