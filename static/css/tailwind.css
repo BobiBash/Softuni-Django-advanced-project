@@ -462,9 +462,6 @@
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
   .grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -866,21 +863,6 @@
     &:focus {
       --tw-outline-style: none;
       outline-style: none;
-    }
-  }
-  .has-\[\:checked\]\:border-green-600 {
-    &:has(*:is(:checked)) {
-      border-color: var(--color-green-600);
-    }
-  }
-  .has-\[\:checked\]\:bg-green-600 {
-    &:has(*:is(:checked)) {
-      background-color: var(--color-green-600);
-    }
-  }
-  .has-\[\:checked\]\:text-white {
-    &:has(*:is(:checked)) {
-      color: var(--color-white);
     }
   }
   .md\:grid-cols-\[300px_1fr\] {

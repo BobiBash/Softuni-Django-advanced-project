@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 import json
 
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView, ListView
 
 from appointments.models import AppointmentSlot, Appointment
 from pets.models import Pet
@@ -39,7 +39,7 @@ class VetScheduleView(LoginRequiredMixin, View):
             )
         return redirect('vet-schedule', slug)
 
-class UserAppointMentView(LoginRequiredMixin, View):
+class UserMakeAppointMentView(LoginRequiredMixin, View):
     def post(self, request, slug):
         owner_id = request.user.pk
         slot_id = request.POST.get('slot')
@@ -48,3 +48,12 @@ class UserAppointMentView(LoginRequiredMixin, View):
         Appointment.objects.create(owner_id=owner_id, slot_id=slot_id, pet_id=pet_id)
 
         return redirect('vets-list')
+
+
+class UserAppointmentsView(LoginRequiredMixin, ListView):
+    model = Appointment
+    template_name = 'accounts/user_appointments.html'
+    context_object_name = 'appointments'
+
+    def get_queryset(self):
+        return Appointment.objects.filter(owner=self.request.user)
