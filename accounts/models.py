@@ -12,6 +12,9 @@ class PawMedicUser(AbstractUser):
     role = models.CharField(max_length=20, choices=PawMedicUserType.choices, default=PawMedicUserType.OWNER)
     is_active = models.BooleanField(default=False)
 
+    def get_fullname(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class EmailConfirmation(models.Model):
     user = models.OneToOneField(PawMedicUser, on_delete=models.CASCADE)

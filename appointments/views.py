@@ -42,10 +42,11 @@ class VetScheduleView(LoginRequiredMixin, View):
 class UserMakeAppointMentView(LoginRequiredMixin, View):
     def post(self, request, slug):
         owner_id = request.user.pk
+        print(owner_id)
         slot_id = request.POST.get('slot')
         pet_id = request.POST.get('pet')
 
-        Appointment.objects.create(owner_id=owner_id, slot_id=slot_id, pet_id=pet_id)
+        Appointment.objects.create(vet_id=owner_id, slot_id=slot_id, pet_id=pet_id)
 
         return redirect('vets-list')
 
@@ -56,4 +57,4 @@ class UserAppointmentsView(LoginRequiredMixin, ListView):
     context_object_name = 'appointments'
 
     def get_queryset(self):
-        return Appointment.objects.filter(owner=self.request.user)
+        return Appointment.objects.filter(vet=self.request.user)
