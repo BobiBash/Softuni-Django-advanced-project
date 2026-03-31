@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="flex flex-col">
+        {% for object in object_list %}
+            <div class="flex flex-col border p-4 rounded-sm">
+                <p>{{ object.title }}</p>
+                <p>{{ object.content }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
