@@ -2,11 +2,13 @@
 
 {% block content %}
     <div class="flex flex-col gap-4 w-100">
+    {% if object_list %}
         {% for object in object_list %}
             <a href="{% url 'forum-post-details' pk=object.pk %}" class="flex flex-col border p-4 rounded-sm">
                 <p class="text-2xl font-semibold">{{ object.title }}</p>
                 <p>{{ object.content }}</p>
             </a>
         {% endfor %}
+    {% endif %}
     </div>
 {% endblock %}

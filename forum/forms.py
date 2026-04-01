@@ -14,4 +14,20 @@ class ForumCommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
-        fields = "__all__"
+        fields = ('content',)
+
+
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'rows': 3,
+                'cols': 40,
+                'style': 'resize:none',
+                'class': 'border p-2 rounded-sm focus:outline-none',
+            })
+        }
+
+        error_messages = {
+            'content': {
+                'required': 'This field is required',
+            }
+        }

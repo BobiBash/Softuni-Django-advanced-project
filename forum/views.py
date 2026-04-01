@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
+from forum.forms import ForumCommentForm
 from forum.models import ForumPost, Comment
 
 
@@ -33,11 +34,13 @@ class ForumUpdatePostView(LoginRequiredMixin, UpdateView):
 class ForumPostDetailView(LoginRequiredMixin, View):
     def get(self, request, pk):
         post = ForumPost.objects.get(pk=pk)
+        form = ForumCommentForm()
         comments = Comment.objects.filter(post_id=pk)
 
         context = {
             'post': post,
             'comments': comments,
+            'form': form
         }
 
         return render(request, 'forum/forum-view-post.html', context)
@@ -54,13 +57,21 @@ class ForumPostDeleteView(LoginRequiredMixin, DeleteView):
 class ForumCreateCommentView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
-        content = request.POST.get('content')
+        form = ForumCommentForm(request.POST)
+        print(form.errors)
 
-        Comment.objects.create(
-            author_id=request.user.id,
-            content=content,
-            post_id=pk,
-        )
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post_id = pk
+            comment.save()
+            return redirect('forum-post-details', pk=pk)
 
-        return redirect('forum-post-details', pk=pk)
+        post = ForumPost.objects.get(pk=pk)
+        comments = Comment.objects.filter(post_id=pk)
+        return render(request, 'forum/forum-view-post.html', {
+            'post': post,
+            'form': form,
+            'comments': comments,
+        })
 

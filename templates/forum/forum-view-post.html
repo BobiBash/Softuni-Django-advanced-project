@@ -1,19 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {{ post.title }}
-    {{ post.content }}
-    {% if comments %}
-        {% for comment in comments %}
-            {{ comment }}
-        {% endfor %}
-    {% else %}
-        <p>No comments yet. Be the first to comment!</p>
-    {% endif %}
-    <form method="post" action="{% url 'forum-create-comment' pk=post.pk %}">
-        {% csrf_token %}
-        <textarea name="content"></textarea>
-        <br>
-        <button type="submit">Submit</button>
-    </form>
+    <div class="flex flex-col gap-4">
+        <div class="flex flex-col w-200 border p-4 rounded-sm">
+            <p class="text-3xl">{{ post.title }}</p>
+            <p>{{ post.author.get_fullname }}</p>
+            <p>{{ post.content }}</p>
+        </div>
+        <div class="flex flex-col items-center">
+            <h1 class="text-3xl flex justify-center">Comments</h1>
+            <form class="flex flex-col items-center" novalidate method="post" action="{% url 'forum-create-comment' pk=post.pk %}">
+                {% csrf_token %}
+                {{ form.content }}
+                <p>{{ form.content.errors }}</p>
+                <br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="flex flex-col border rounded-sm p-2">
+                    <p class="text-xl font-extralight">By {{ comment.author }}</p>
+                    <p>{{ comment.content }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No comments yet. Be the first to comment!</p>
+        {% endif %}
+    </div>
 {% endblock %}
