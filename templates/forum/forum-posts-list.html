@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-4 w-100">
         {% for object in object_list %}
-            <div class="flex flex-col border p-4 rounded-sm">
-                <p>{{ object.title }}</p>
+            <a href="{% url 'forum-post-details' pk=object.pk %}" class="flex flex-col border p-4 rounded-sm">
+                <p class="text-2xl font-semibold">{{ object.title }}</p>
                 <p>{{ object.content }}</p>
-            </div>
+            </a>
         {% endfor %}
     </div>
 {% endblock %}

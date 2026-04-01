@@ -1,6 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {{ object.title }}
-    {{ object.content }}
+    {{ post.title }}
+    {{ post.content }}
+    {% if comments %}
+        {% for comment in comments %}
+            {{ comment }}
+        {% endfor %}
+    {% else %}
+        <p>No comments yet. Be the first to comment!</p>
+    {% endif %}
+    <form method="post" action="{% url 'forum-create-comment' pk=post.pk %}">
+        {% csrf_token %}
+        <textarea name="content"></textarea>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
 {% endblock %}

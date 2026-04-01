@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {{ object.author.get_full_name }}
+    {{ object.title }}
+    {{ object.content }}
+{% endblock %}

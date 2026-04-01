@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
-from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from django.shortcuts import render, redirect
+from django.views import View
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from forum.models import ForumPost
+from forum.models import ForumPost, Comment
 
 
 # Create your views here.
@@ -26,6 +27,40 @@ class ForumUpdatePostView(LoginRequiredMixin, UpdateView):
         context['post'] = self.get_object()
         return context
 
-class ForumPostDetailView(LoginRequiredMixin, DetailView):
+    def get_queryset(self):
+        return ForumPost.objects.filter(author_id=self.request.user.id)
+
+class ForumPostDetailView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        post = ForumPost.objects.get(pk=pk)
+        comments = Comment.objects.filter(post_id=pk)
+
+        context = {
+            'post': post,
+            'comments': comments,
+        }
+
+        return render(request, 'forum/forum-view-post.html', context)
+
+
+class ForumPostDeleteView(LoginRequiredMixin, DeleteView):
     model = ForumPost
-    template_name = 'forum/forum-view-post.html'
+    template_name = 'forum/forum-delete-post.html'
+
+    def get_queryset(self):
+        return ForumPost.objects.filter(author_id=self.request.user.id)
+
+
+class ForumCreateCommentView(LoginRequiredMixin, View):
+
+    def post(self, request, pk):
+        content = request.POST.get('content')
+
+        Comment.objects.create(
+            author_id=request.user.id,
+            content=content,
+            post_id=pk,
+        )
+
+        return redirect('forum-post-details', pk=pk)
+
