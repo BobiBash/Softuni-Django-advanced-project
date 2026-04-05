@@ -20,14 +20,73 @@
         <div class="mt-10 flex flex-col gap-4">
             {% if comments %}
                 {% for comment in comments %}
-                    <div class="flex flex-col border w-md rounded-sm p-2">
+                    <div class="flex flex-col border w-lg rounded-sm p-2" id="comment-{{ comment.pk }}">
                         <p class="text-xl font-extralight">By {{ comment.author }}</p>
-                        <p>{{ comment.content }}</p>
+                        <p class="comment-text">{{ comment.content }}</p>
+                        <form method="post" action="{% url 'forum-update-comment' pk=comment.pk %}" class="comment-form" style="display:none;">
+                            {% csrf_token %}
+                            <textarea name="content" class="border p-2 rounded-sm w-full focus:outline-none" rows="3" style="resize:none;">{{ comment.content }}</textarea>
+                            <div class="flex gap-2 mt-2">
+                                <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded-sm">Save</button>
+                                <button type="button" onclick="cancelEdit({{ comment.pk }})" class="bg-gray-400 text-white px-3 py-1 rounded-sm">Cancel</button>
+                            </div>
+                        </form>
+                        <div class="flex gap-2">
+                            {% if comment.author == user %}
+                                <button id="edit-btn" class="edit-btn text-sm bg-blue-500 w-10 rounded-sm border border-black p-1 text-white hover:underline mt-1" onclick="enableEdit({{ comment.pk }})">Edit</button>
+                                <form method="post" action="{% url 'forum-delete-comment' pk=comment.pk %}">
+                                    {% csrf_token %}
+                                    <button type="button" id="delete-btn" class="edit-btn text-sm bg-red-500 w-15 rounded-sm border border-black p-1 text-white hover:underline mt-1" onclick="DeleteConfirmation()">Delete</button>
+                                    <p id="delete-p" class="hidden font-medium">Are you sure you want to permanently delete your comment?</p>
+                                    <button id="confirm-btn" type="submit" class="hidden edit-btn text-sm bg-red-500 w-15 rounded-sm border border-black p-1 text-white hover:underline mt-1">Confirm</button>
+                                    <button id="cancel-btn" type="button" class="hidden bg-gray-400 text-white px-3 py-1 rounded-sm" onclick="CancelDeleteConfirmation()">Cancel</button>
+                                </form>
+                            {% endif %}
+                        </div>
                     </div>
                 {% endfor %}
             {% else %}
                 <p>No comments yet. Be the first to comment!</p>
             {% endif %}
         </div>
+    </div>
+    <script>
+        const deleteBtn = document.getElementById('delete-btn')
+        const editBtn = document.getElementById('edit-btn')
+        const confirmBtn = document.getElementById('confirm-btn')
+        const cancelBtn = document.getElementById('cancel-btn')
+        const deleteP = document.getElementById('delete-p')
+
+
+        function enableEdit(pk) {
+            const block = document.getElementById('comment-' + pk);
+            block.querySelector('.comment-text').style.display = 'none';
+            block.querySelector('.comment-form').style.display = 'block';
+            block.querySelector('.edit-btn').style.display = 'none';
+            deleteBtn.classList.add('hidden')
+        }
+        function cancelEdit(pk) {
+            const block = document.getElementById('comment-' + pk);
+            block.querySelector('.comment-text').style.display = 'block';
+            block.querySelector('.comment-form').style.display = 'none';
+            block.querySelector('.edit-btn').style.display = 'inline';
+        }
+
+        function DeleteConfirmation() {
+            editBtn.classList.add('hidden')
+            deleteBtn.classList.add('hidden')
+            confirmBtn.classList.remove('hidden')
+            cancelBtn.classList.remove('hidden')
+            deleteP.classList.remove('hidden')
+        }
+
+        function CancelDeleteConfirmation() {
+            editBtn.classList.remove('hidden')
+            deleteBtn.classList.remove('hidden')
+            confirmBtn.classList.add('hidden')
+            cancelBtn.classList.add('hidden')
+            deleteP.classList.add('hidden')
+        }
+    </script>
     </div>
 {% endblock %}

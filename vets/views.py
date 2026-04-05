@@ -1,6 +1,6 @@
 import json
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.views import View
@@ -22,7 +22,14 @@ class VetListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return VetProfile.objects.exclude(is_published=False)
 
-class VetPublishView(LoginRequiredMixin, View):
+class VetPublishView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'accounts.change_vetprofile'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != PawMedicUserType.VET:
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+
     def post(self, request):
         vet = request.user.vet_profile
         vet.is_published = not vet.is_published

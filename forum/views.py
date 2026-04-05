@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -12,16 +12,18 @@ class ForumPostsListView(LoginRequiredMixin, ListView):
     model = ForumPost
     template_name = 'forum/forum-posts-list.html'
 
-class ForumCreatePostView(LoginRequiredMixin, CreateView):
+class ForumCreatePostView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = ForumPost
     template_name = 'forum/forum-create-post.html'
     fields = ('title', 'content')
+    permission_required = 'forum.add_forumpost'
 
 
-class ForumUpdatePostView(LoginRequiredMixin, UpdateView):
+class ForumUpdatePostView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     model = ForumPost
     template_name = 'forum/forum-edit-post.html'
     fields = 'title', 'content'
+    permission_required = 'forum.change_forumpost'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,15 +48,17 @@ class ForumPostDetailView(LoginRequiredMixin, View):
         return render(request, 'forum/forum-view-post.html', context)
 
 
-class ForumPostDeleteView(LoginRequiredMixin, DeleteView):
+class ForumPostDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     model = ForumPost
     template_name = 'forum/forum-delete-post.html'
+    permission_required = 'forum.delete_forumpost'
 
     def get_queryset(self):
         return ForumPost.objects.filter(author_id=self.request.user.id)
 
 
-class ForumCreateCommentView(LoginRequiredMixin, View):
+class ForumCreateCommentView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'forum.add_comment'
 
     def post(self, request, pk):
         form = ForumCommentForm(request.POST)
@@ -74,4 +78,23 @@ class ForumCreateCommentView(LoginRequiredMixin, View):
             'form': form,
             'comments': comments,
         })
+
+class ForumUpdateCommentView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'forum.change_comment'
+
+    def post(self, request, pk):
+        comment = Comment.objects.get(pk=pk, author_id=request.user.id)
+        comment.content = request.POST.get('content')
+        comment.save()
+        return redirect('forum-post-details', pk=comment.post_id)
+
+class ForumDeleteCommentView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'forum.delete_comment'
+
+    def post(self, request, pk):
+        comment = Comment.objects.get(pk=pk, author_id=request.user.id)
+        comment.delete()
+        return redirect('forum-post-details', pk=comment.post_id)
+
+
 

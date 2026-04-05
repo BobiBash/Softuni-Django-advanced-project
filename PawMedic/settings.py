@@ -48,7 +48,7 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
 
 APPS = ['accounts', 'common',
         'forum', 'notifications',
-        'pets', 'shop', 'vets', 'appointments',]
+        'pets', 'vets', 'appointments',]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -101,7 +101,7 @@ DATABASES = {
         "USER": os.getenv('DB_USER'),
         "PASSWORD": os.getenv('DB_PASSWORD'),
         "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "PORT": "5433",
     }
 }
 
