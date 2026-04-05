@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -17,6 +18,12 @@ class ForumCreatePostView(PermissionRequiredMixin, LoginRequiredMixin, CreateVie
     form_class = ForumCreatePostForm
     template_name = 'forum/forum-create-post.html'
     permission_required = 'forum.add_forumpost'
+    success_url = reverse_lazy('forum-posts-list')
+
+    def form_valid(self, form):
+        form.instance.author_id = self.request.user.id
+        return super().form_valid(form)
+
 
 
 class ForumUpdatePostView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):

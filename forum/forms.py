@@ -17,10 +17,10 @@ class ForumCreatePostForm(forms.ModelForm):
 
         widgets = {
             'title': forms.TextInput(attrs={
-                'class': 'p-1 border rounded-sm focus:outline-none'
+                'class': 'p-2 border rounded-sm w-md focus:outline-none'
             }),
             'content': forms.Textarea(attrs={
-                'class': 'p-1 border rounded-sm focus:outline-none',
+                'class': 'p-1 border rounded-sm w-md focus:outline-none',
                 'style': 'resize:none'
             })
         }

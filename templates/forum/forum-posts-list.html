@@ -1,14 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <a class="absolute top-25 text-2xl border rounded-sm p-1 bg-gray-300" href="{% url 'forum-post-create' %}">Create Post + </a>
-    <div class="flex flex-col gap-4 w-100 justify-center items-center">
+    <a class="text-2xl m-2 border rounded-sm p-1 bg-gray-300" href="{% url 'forum-post-create' %}">Create Post + </a>
+    <div class="flex m-4 flex-col gap-4 justify-center items-center">
     {% if object_list %}
         {% for object in object_list %}
-            <a href="{% url 'forum-post-details' pk=object.pk %}" class="flex flex-col border p-4 rounded-sm">
-                <p class="text-2xl font-semibold">{{ object.title }}</p>
-                <p>{{ object.content }}</p>
-            </a>
+            <div class="flex border p-4 rounded-sm w-md gap-2">
+                <div class="flex-wrap flex-col w-90">
+                    <a href="{% url 'forum-post-details' pk=object.pk %}" class="text-2xl font-semibold">{{ object.title }}</a>
+                    <p class="wrap-break-word line-clamp-2">{{ object.content }}</p>
+                </div>
+                {% if object.author == user %}
+                    <div>
+                        <a href="{% url 'forum-edit-post' pk=object.pk %}" class="bg-blue-500 w-12 rounded-sm border border-black py-1 px-2 text-white hover:underline mt-1">Edit</a>
+                    </div>
+                {% endif %}
+            </div>
         {% endfor %}
     {% endif %}
     </div>
