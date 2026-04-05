@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 
 from . import views
-from .forms import PawMedicPasswordResetForm, PawMedicPasswordChangeForm
+from .forms import PawMedicPasswordResetForm, PawMedicPasswordChangeForm, PawMedicUserPasswordReset
 from .views import PawMedicPasswordResetView
 
 urlpatterns = [
@@ -25,7 +25,9 @@ urlpatterns = [
          ),
          name='password_change_done'),
     path('password-reset/',
-         PawMedicPasswordResetView.as_view(),
+         PawMedicPasswordResetView.as_view(
+            form_class=PawMedicUserPasswordReset,
+         ),
          name='password-reset'),
     path('password-reset-done/',
          auth_views.PasswordResetDoneView.as_view(
