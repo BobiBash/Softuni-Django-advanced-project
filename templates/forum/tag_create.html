@@ -5,7 +5,7 @@
     <h1 class="text-2xl font-semibold">Create Tag</h1>
     <form method="post" class="flex flex-col gap-4">
         {% csrf_token %}
-        <div class="flex flex-col gap-2">
+        <div class="flex w-md flex-col justify-center items-center gap-2">
             {{ form.as_p }}
         </div>
         <button type="submit" class="bg-green-500 rounded-sm border border-black py-2 px-4 text-white hover:underline">Create Tag</button>

@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
-<nav class="sticky text-center text-lg bg-gray-100 border border-t-0 w-xl grid grid-cols-4">
+    {% if user.role == 'VET' %}
+        <nav class="sticky text-center text-lg bg-gray-100 border border-t-0 w-xl grid grid-cols-4">
+    {% else %}
+        <nav class="sticky text-center text-lg bg-gray-100 border border-t-0 w-xl grid grid-cols-3">
+    {% endif %}
     {% if user.role == 'OWNER' %}
         <a href="{% url 'user-profile' %}" class="hover:bg-gray-200 border-r p-2">Your Profile</a>
     {% else %}
@@ -9,10 +13,12 @@
     {% endif %}
     <a href="{% url 'pets' %}" class="hover:bg-gray-200 border-r p-2">Pets</a>
     {% if user.role == 'OWNER' %}
-        <a href="{% url 'appointments' %}" class="hover:bg-gray-200 border-r p-2">Appointments</a>
+        <a href="{% url 'appointments' %}" class="hover:bg-gray-200 p-2">Appointments</a>
     {% elif user.role == 'VET' and user.vet_profile %}
         <a href="{% url 'vet-schedule' slug=user.vet_profile.slug %}" class="hover:bg-gray-200 border-r p-2">Schedule</a>
     {% endif %}
-    <a href="{% url 'service-list' %}" class="hover:bg-gray-200 p-2">Services</a>
+    {% if user.role == 'VET' and user.vet_profile %}
+        <a href="{% url 'service-list' %}" class="hover:bg-gray-200 p-2">Services</a>
+    {% endif %}
 </nav>
 {% endblock %}

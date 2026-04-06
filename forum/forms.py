@@ -12,19 +12,12 @@ class ForumPostsForm(forms.ModelForm):
 class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
-        fields = ("name", "slug")
+        fields = ("name",)
 
         widgets = {
             "name": forms.TextInput(
                 attrs={
                     "class": "p-2 border rounded-sm w-md focus:outline-none",
-                    "placeholder": "e.g. nutrition",
-                }
-            ),
-            "slug": forms.TextInput(
-                attrs={
-                    "class": "p-2 border rounded-sm w-md focus:outline-none",
-                    "placeholder": "e.g. nutrition",
                 }
             ),
         }
@@ -33,10 +26,6 @@ class TagForm(forms.ModelForm):
             "name": {
                 "required": "Tag name is required.",
                 "unique": "This tag already exists.",
-            },
-            "slug": {
-                "required": "Slug is required.",
-                "unique": "This slug already exists.",
             },
         }
 
