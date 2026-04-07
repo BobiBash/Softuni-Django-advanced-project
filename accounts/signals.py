@@ -25,11 +25,14 @@ def setup_groups_and_permissions(sender, **kwargs):
     owners_group, _ = Group.objects.get_or_create(name="Pet Owners")
 
     def get_perm(codename, app_label, model):
-        ct = ContentType.objects.get(app_label=app_label, model=model)
-        return Permission.objects.get(codename=codename, content_type=ct)
+        try:
+            ct = ContentType.objects.get(app_label=app_label, model=model)
+            return Permission.objects.get(codename=codename, content_type=ct)
+        except (ContentType.DoesNotExist, Permission.DoesNotExist):
+            return None
 
     vets_group.permissions.set(
-        [
+        [p for p in [
             get_perm("change_vetprofile", "accounts", "vetprofile"),
             get_perm("change_appointmentslot", "appointments", "appointmentslot"),
             get_perm("add_forumpost", "forum", "forumpost"),
@@ -45,11 +48,11 @@ def setup_groups_and_permissions(sender, **kwargs):
             get_perm("change_service", "accounts", "service"),
             get_perm("delete_service", "accounts", "service"),
             get_perm("view_pet", "pets", "pet"),
-        ]
+        ] if p is not None]
     )
 
     owners_group.permissions.set(
-        [
+        [p for p in [
             get_perm("add_pet", "pets", "pet"),
             get_perm("view_pet", "pets", "pet"),
             get_perm("change_pet", "pets", "pet"),
@@ -62,5 +65,5 @@ def setup_groups_and_permissions(sender, **kwargs):
             get_perm("delete_comment", "forum", "comment"),
             get_perm("add_appointment", "appointments", "appointment"),
             get_perm("view_appointment", "appointments", "appointment"),
-        ]
+        ] if p is not None]
     )
