@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView
 
@@ -41,20 +41,13 @@ class VetPublishView(PermissionRequiredMixin, LoginRequiredMixin, View):
 class VetDetailView(LoginRequiredMixin, View):
     def get(self, request, slug, pk):
         user = request.user
-        print(pk)
-        vet = VetProfile.objects.get(pk=pk)
-        print(vet.bio)
-        print(user)
+        vet = get_object_or_404(VetProfile, pk=pk)
         pets = Pet.objects.filter(owner_id=user.id)
-        print(user.id)
-        print(pets)
         taken_slots = Appointment.objects.values_list('slot_id', flat=True)
         available_slots = (AppointmentSlot.objects.filter(vet_id=pk)
                            .values('id', 'date', 'time')
                            .exclude(id__in=taken_slots))
 
-        print(pk)
-        print(available_slots)
 
         context = {
             'user': user,
@@ -67,7 +60,6 @@ class VetDetailView(LoginRequiredMixin, View):
         return render(request, 'vets/vets-detail.html', context)
 
 class VetSearchView(LoginRequiredMixin, View):
-
     def get(self, request):
         query = request.GET.get('search', '')
         print(query)

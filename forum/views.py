@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
@@ -42,7 +42,7 @@ class ForumUpdatePostView(PermissionRequiredMixin, LoginRequiredMixin, UpdateVie
 
 class ForumPostDetailView(LoginRequiredMixin, View):
     def get(self, request, pk):
-        post = ForumPost.objects.get(pk=pk)
+        post = get_object_or_404(ForumPost, pk=pk)
         form = ForumCommentForm()
         comments = Comment.objects.filter(post_id=pk)
 
@@ -79,7 +79,7 @@ class ForumCreateCommentView(PermissionRequiredMixin, LoginRequiredMixin, View):
             comment.save()
             return redirect('forum-post-details', pk=pk)
 
-        post = ForumPost.objects.get(pk=pk)
+        post = get_object_or_404(ForumPost, pk=pk)
         comments = Comment.objects.filter(post_id=pk)
         return render(request, 'forum/forum-view-post.html', {
             'post': post,
@@ -91,7 +91,7 @@ class ForumUpdateCommentView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'forum.change_comment'
 
     def post(self, request, pk):
-        comment = Comment.objects.get(pk=pk, author_id=request.user.id)
+        comment = get_object_or_404(Comment, pk=pk, author_id=request.user.id)
         comment.content = request.POST.get('content')
         comment.save()
         return redirect('forum-post-details', pk=comment.post_id)
@@ -100,7 +100,7 @@ class ForumDeleteCommentView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'forum.delete_comment'
 
     def post(self, request, pk):
-        comment = Comment.objects.get(pk=pk, author_id=request.user.id)
+        comment = get_object_or_404(Comment, pk=pk, author_id=request.user.id)
         comment.delete()
         return redirect("forum-post-details", pk=comment.post_id)
 

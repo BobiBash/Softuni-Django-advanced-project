@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import LoginView, PasswordResetView, LogoutView
 from django.core.mail import send_mail
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import (
@@ -24,19 +24,19 @@ from .models import EmailConfirmation, VetProfile, Service
 
 
 class RegisterView(CreateView):
-    template_name = 'accounts/register_user.html'
+    template_name = "accounts/register_user.html"
     form_class = RegistrationForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy("home")
 
     # check if user is authenticated
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('home')
+            return redirect("home")
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['role'] = PawMedicUserType.OWNER
+        kwargs["role"] = PawMedicUserType.OWNER
         return kwargs
 
     def form_valid(self, form):
@@ -46,29 +46,30 @@ class RegisterView(CreateView):
         token = default_token_generator.make_token(user)
         EmailConfirmation.objects.create(user=user, token=token)
         confirmation_url = self.request.build_absolute_uri(
-            reverse('confirm-email', kwargs={'key': token})
+            reverse("confirm-email", kwargs={"key": token})
         )
         send_mail(
-            'Email Confirmation',
-            f'Greetings {user.username} you can confirm your email at: %s' % confirmation_url,
+            "Email Confirmation",
+            f"Greetings {user.username} you can confirm your email at: %s"
+            % confirmation_url,
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
         )
-        return redirect('needed-email-confirmation')
+        return redirect("needed-email-confirmation")
 
 
 class RegisterVetView(View):
-    template_name = 'accounts/register_vet.html'
+    template_name = "accounts/register_vet.html"
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('home')
+            return redirect("home")
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
         user_form = RegistrationForm(role=PawMedicUserType.VET)
         vet_form = VetProfileForm()
-        context = {'form': user_form, 'vet_form': vet_form}
+        context = {"form": user_form, "vet_form": vet_form}
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -87,12 +88,9 @@ class RegisterVetView(View):
             vet_profile.user = user
             vet_profile.save()
 
-            return redirect('confirm-vet')
+            return redirect("confirm-vet")
 
-        context = {
-            'form': user_form,
-            'vet_form': vet_form
-        }
+        context = {"form": user_form, "vet_form": vet_form}
 
         return render(request, self.template_name, context)
 
@@ -112,7 +110,7 @@ class LoginUserView(LoginView):
 
 class ConfirmEmailView(View):
     def get(self, request, key):
-        confirmation = EmailConfirmation.objects.get(token=key)
+        confirmation = get_object_or_404(EmailConfirmation, token=key)
         user = confirmation.user
         user.is_active = True
         user.save()
@@ -121,19 +119,24 @@ class ConfirmEmailView(View):
 
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
-    template_name = 'accounts/user_profile.html'
+    template_name = "accounts/user_profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         print(user, user.email, user.role)
-        context['profile'] = user
+        context["profile"] = user
         return context
 
 
 class VetProfileView(LoginRequiredMixin, TemplateView):
     model = VetProfile
-    template_name = 'accounts/vet_profile.html'
+    template_name = "accounts/vet_profile.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != PawMedicUserType.VET:
+            return redirect("home")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -148,6 +151,11 @@ class PawMedicPasswordResetView(AnonymousRequiredMixin, PasswordResetView):
 
 
 class UpdateProfilePhotoView(LoginRequiredMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != PawMedicUserType.VET:
+            return redirect("home")
+        return super().dispatch(request, *args, **kwargs)
+
     def post(self, request):
         vet = request.user.vet_profile
         vet.photo = request.FILES.get('photo')
@@ -155,6 +163,11 @@ class UpdateProfilePhotoView(LoginRequiredMixin, View):
         return redirect('vet-profile')
 
 class UpdateProfileBioView(LoginRequiredMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != PawMedicUserType.VET:
+            return redirect("home")
+        return super().dispatch(request, *args, **kwargs)
+
     def post(self, request):
         vet = request.user.vet_profile
         vet.bio = request.POST.get('bio')
