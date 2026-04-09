@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="absolute top-25 h-10 justify-center text-3xl font-bold">Favorite Veterinarians</h1>
+    <div>
+        {% for object in object_list %}
+            <div class="border flex rounded-sm bg-white">
+                <a href="{{ object.vet.photo.url }}" target="_blank">
+                    <img class="object-cover rounded-full h-25 w-25 p-2" src="{{ object.vet.photo.url }}">
+                </a>
+                <div class="flex flex-col p-2">
+                    <a href="{% url 'vets-detail' slug=object.vet.slug pk=object.vet.id %}" class="flex text-xl font-semibold gap-2 capitalize">
+                        <p>{{ object.vet.user.get_full_name }}</p>
+                    </a>
+                    <div class="flex gap-2 items-center">
+                        <label class="font-semibold text-lg">Specialization:</label>
+                        <p>{{ object.vet.specialization }}</p>
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <label class="font-semibold text-lg">Years of experience:</label>
+                        <p>{{ object.vet.years_of_experience }}</p>
+                    </div>
+                </div>
+            </div>
+          <div class="flex justify-center mx-auto gap-2 mt-5">
+            {% if page_obj.has_previous %}
+              <a class="border py-1 px-2 rounded-sm bg-gray-200" href="?page=1">First</a>
+              <a class="border py-1 px-2 rounded-sm bg-gray-200" href="?page={{ page_obj.prev_page_number }}">Previous</a>
+              {% endif %}
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+              {% if page_obj.has_next %}
+              <a class="border py-1 px-2 rounded-sm bg-gray-200" href="?page={{ page_obj.next_page_number }}">Next</a>
+              <a class="border py-1 px-2 rounded-sm bg-gray-200" href="?page=last">Last</a>
+            {% endif %}
+          </div>
+        {% endfor %}
+    </div>
+{% endblock %}

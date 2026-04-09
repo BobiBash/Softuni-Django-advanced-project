@@ -2,7 +2,7 @@
 
 {% block profile_pic %}
     {% if vet.photo %}
-        <img id="ImagePreview" class="h-30 w-30 rounded-full" src="{{ vet.photo.url }}">
+        <img id="ImagePreview" class="h-30 w-30 rounded-full object-cover" src="{{ vet.photo.url }}">
     {% else %}
         <div id="imagePreviewDiv" class="h-30 w-30 mx-auto rounded-full border bg-gray-100 flex items-center justify-center text-gray-400">No photo</div>
         <img id="ImagePreview" class="h-30 w-30 rounded-full hidden" src="">
@@ -32,16 +32,6 @@
                     <p>{{ vet.years_of_experience }}</p>
                 </div>
                 <div class="flex flex-row gap-2 col-span-2">
-                    <label class="font-light">Services: </label>
-                    {% if vet.services.all %}
-                        <div class="flex flex-wrap gap-1">
-                            {% for service in vet.services.all %}
-                                <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-sm text-sm">{{ service.name }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-gray-400">No services listed</p>
-                    {% endif %}
                 </div>
               {% endblock %}
             </div>

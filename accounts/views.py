@@ -8,13 +8,13 @@ from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import (
     CreateView,
-    TemplateView,
+    TemplateView, ListView,
 )
 
 from .choices import PawMedicUserType
 from .forms import RegistrationForm, LoginForm, VetProfileForm
 from .mixins import AnonymousRequiredMixin
-from .models import EmailConfirmation, VetProfile
+from .models import EmailConfirmation, VetProfile, FavoriteVet
 
 
 # Create your views here.
@@ -171,3 +171,32 @@ class UpdateProfileBioView(LoginRequiredMixin, View):
         vet.save()
         return redirect('vet-profile')
 
+class AddFavoriteVet(LoginRequiredMixin, View):
+
+    def post(self, request, pk):
+        owner_id = request.user.id
+        print(pk)
+        vet = get_object_or_404(VetProfile, pk=pk)
+        favorite = FavoriteVet.objects.filter(owner_id=owner_id, vet=vet).first()
+
+        if favorite:
+            favorite.delete()
+        else:
+            FavoriteVet.objects.create(
+                owner_id=owner_id,
+                vet_id=vet.pk
+            )
+
+        return redirect('vets-detail', slug=vet.slug, pk=vet.pk)
+
+
+class UserFavorites(LoginRequiredMixin, ListView):
+    model = FavoriteVet
+    template_name = 'accounts/favorite_vets.html'
+    paginate_by = 10
+
+
+class VetFavoritedBy(LoginRequiredMixin, ListView):
+    model = FavoriteVet
+    template_name = 'accounts/favorited_by.html'
+    paginate_by = 10

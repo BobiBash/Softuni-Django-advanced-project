@@ -93,4 +93,7 @@ urlpatterns = [
     path(
         'vet/update-bio/', views.UpdateProfileBioView.as_view(), name='update-vet-bio'
     ),
+    path('vet/<int:pk>/favorite', views.AddFavoriteVet.as_view(), name='add-favoriteVet'),
+    path('favorites-list', views.UserFavorites.as_view(), name='user-favorites'),
+path('favorited_by-list', views.VetFavoritedBy.as_view(), name='vet-favorited_by')
 ]

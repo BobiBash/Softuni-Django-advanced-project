@@ -8,15 +8,27 @@
     {% if vet.photo %}
       <img src="{{ vet.photo.url }}" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover">
     {% else %}
-      <div class="w-24 h-24 rounded-full mx-auto mb-3 bg-green-100 flex items-center justify-center text-green-700 text-2xl font-medium">
+      <div class="w-24 h-24 rounded-full mx-auto mb-3 border-0">
         {{ vet.first_name }}{{ vet.user.last_name.0 }}
       </div>
     {% endif %}
     <p class="text-center font-medium text-lg">Dr. {{ vet.get_fullname }}</p>
     <p class="text-center text-sm text-gray-500 mb-3">{{ vet.specialization }}</p>
-    <div class="text-center mb-4">
-      <span class="bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full">Available</span>
-    </div>
+    <form method="post" action="{% url 'add-favoriteVet' pk=vet.pk %}" class="flex justify-center">
+        {% csrf_token %}
+        <button id="star-btn"
+          class="gap-2 px-2 py-2 rounded-xl border border-gray-200
+                 bg-transparent text-gray-400 text-sm font-medium cursor-pointer
+                 transition-all duration-150 hover:bg-gray-100 whitespace-nowrap">
+            {% if user in vet.favorite_vets.all %}
+                <span id="star-icon" class="text-lg leading-none">★</span>
+                <span id="star-label">Favorited</span>
+            {% else %}
+                <span id="star-icon" class="text-lg leading-none">☆</span>
+                <span id="star-label">Add to favorites</span>
+            {% endif %}
+        </button>
+    </form>
     <hr class="border-gray-100 my-4">
     <div class="text-sm space-y-2">
       <div class="flex justify-between">
@@ -102,4 +114,33 @@
             }
         }});
   </script>
+<script>
+    const btn = document.getElementById('star-btn');
+    const icon = document.getElementById('star-icon');
+    const label = document.getElementById('star-label');
+    let starred = {% if user in vet.favorite_vets.all %} true;{% else %} false;{% endif %}
+    console.log(starred)
+
+    btn.addEventListener('mouseover', () => { if (!starred) btn.style.background = '#f9fafb'; });
+    btn.addEventListener('mouseout', () => { if (!starred) btn.style.background = 'transparent'; });
+
+    btn.addEventListener('click', () => {
+    starred = !starred;
+    btn.setAttribute('aria-pressed', starred);
+
+    if (starred) {
+      btn.style.borderColor = '#f59e0b';
+      btn.style.color = '#d97706';
+      icon.style.fill = '#fbbf24';
+      icon.style.stroke = '#f59e0b';
+      label.textContent = 'Favorited';
+    } else {
+      btn.style.borderColor = '#e5e7eb';
+      btn.style.color = '#374151';
+      icon.style.fill = 'none';
+      icon.style.stroke = '#9ca3af';
+      label.textContent = 'Add to favorites';
+    }
+    });
+</script>
 {% endblock %}
