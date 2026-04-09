@@ -37,26 +37,5 @@ else:
     print(f'Weeks ago: {int(weeks)}')
 
 # posted_time_ago(formatted_time)
-seconds = diff.total_seconds()
-minutes = seconds / 60
-hours = minutes / 60
-days = hours / 24
-weeks = days / 7
-months = days / 30
-years = days / 365
 
-if seconds < 60:
-    print(f"{int(seconds)} seconds ago")
-elif minutes < 60:
-    print(f"{int(minutes)} minutes ago")
-elif hours < 24:
-    print(f"{int(hours)} hours ago")
-elif days < 7:
-    print(f"{int(days)} days ago")
-elif weeks < 4:
-    print(f"{int(weeks)} weeks ago")
-elif months < 12:
-    print(f"{int(months)} months ago")
-else:
-    print(f"{int(years)} years ago")
 

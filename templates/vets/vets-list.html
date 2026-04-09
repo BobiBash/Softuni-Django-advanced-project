@@ -6,46 +6,38 @@
         <div class="bg-white flex flex-col border border-t-0 w-md rounded-b-sm hidden absolute" id="results"></div>
     </form>
 <div class="p-2 gap-4 flex flex-col m-10">
-  {% for object in object_list %}
-  <a href="{% url 'vets-detail' slug=object.slug pk=object.pk %}" class="border rounded-sm p-2 flex h-60 w-2xl gap-4 bg-orange-100">
-    <div class="flex w-fit flex-col">
-      <div class="flex flex-row justify-center gap-2 font-semibold text-lg">
-        <p>{{ object.user.first_name }}</p>
-        <p>{{ object.user.last_name }}</p>
-      </div>
-      {% if object.photo %}
-        <img class="mt-3 border rounded-sm h-45 w-50" src="{{ object.photo.url }}">
-      {% else %}
-        <div id="imagePreviewDiv" class="mt-3 h-45 w-50 mx-auto rounded-sm border bg-gray-100 flex items-center justify-center text-gray-400">No photo</div>
-        <img id="ImagePreview" class="h-45 w-50 rounded-full hidden" src="">
-      {% endif %}
-    </div>
-    <div class=" w-md gap-2 flex flex-col flex-wrap">
-      <div>
-        <label class="text-xl font-semibold">Specialization </label>
-        <p>{{ object.specialization }}</p>
-      </div>
-      <div>
-        <label class="text-xl font-semibold">Years of experience</label>
-        <p>{{ object.years_of_experience }}</p>
-      </div>
-      <div>
-        <label class="text-xl font-semibold">Biography</label>
-        <p class="w-100 overflow-hidden text-ellipsis">{{ object.bio }}</p>
-      </div>
-      {% if object.services.all %}
-      <div>
-        <label class="text-xl font-semibold">Services</label>
-        <div class="flex flex-wrap gap-1">
-          {% for service in object.services.all %}
-            <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-sm text-sm">{{ service.name }}</span>
-          {% endfor %}
-        </div>
-      </div>
-      {% endif %}
-    </div>
-  </a>
-  {% endfor %}
+    {% for object in object_list %}
+        {% if object.is_published %}
+            <a href="{% url 'vets-detail' slug=object.slug pk=object.pk %}" class="border rounded-sm p-2 flex h-60 w-2xl gap-4 bg-orange-100">
+            <div class="flex w-fit flex-col">
+              <div class="flex flex-row justify-center gap-2 font-semibold text-lg">
+                <p>{{ object.user.first_name }}</p>
+                <p>{{ object.user.last_name }}</p>
+              </div>
+              {% if object.photo %}
+                <img class="mt-3 border rounded-sm h-45 w-50 object-cover" src="{{ object.photo.url }}">
+              {% else %}
+                <div id="imagePreviewDiv" class="mt-3 h-45 w-50 mx-auto rounded-sm border bg-gray-100 flex items-center justify-center text-gray-400">No photo</div>
+                <img id="ImagePreview" class="h-45 w-50 rounded-full hidden" src="">
+              {% endif %}
+            </div>
+            <div class=" w-md gap-2 flex flex-col flex-wrap">
+              <div>
+                <label class="text-xl font-semibold">Specialization</label>
+                <p>{{ object.specialization }}</p>
+              </div>
+              <div>
+                <label class="text-xl font-semibold">Years of experience</label>
+                <p>{{ object.years_of_experience }}</p>
+              </div>
+              <div>
+                <label class="text-xl font-semibold">Biography</label>
+                <p class="w-100 overflow-hidden text-ellipsis">{{ object.bio }}</p>
+              </div>
+            </div>
+            </a>
+        {% endif %}
+    {% endfor %}
   <div class="inline mx-auto gap-2">
     {% if page_obj.has_previous %}
       <a class="border py-1 px-2 rounded-sm bg-gray-200" href="?page=1">First</a>

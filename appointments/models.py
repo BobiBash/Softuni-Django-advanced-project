@@ -9,6 +9,7 @@ class AppointmentSlot(models.Model):
     vet = models.ForeignKey(VetProfile, on_delete=models.CASCADE, related_name='appointments')
     date = models.DateField()
     time = models.TimeField()
+    date_and_time = models.DateTimeField()
     is_booked = models.BooleanField(default=False)
 
 class Appointment(models.Model):

@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta
-from time import strftime
+from time import strftime, strptime
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 from django.views import View
 import json
 
@@ -44,7 +46,10 @@ class VetScheduleView(PermissionRequiredMixin, LoginRequiredMixin, View):
         AppointmentSlot.objects.filter(vet_id=vet_id, date=date).delete()
 
         for time in times:
-            AppointmentSlot.objects.get_or_create(date=date, time=time, vet_id=vet_id)
+            datetime_str = date + " " + time
+            formatted_data = parse_datetime(datetime_str)
+            formatted_data = timezone.make_aware(formatted_data)
+            AppointmentSlot.objects.get_or_create(date=date, time=time, vet_id=vet_id, date_and_time=formatted_data)
         return redirect("vet-schedule", slug)
 
 

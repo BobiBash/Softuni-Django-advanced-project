@@ -1,5 +1,4 @@
 from datetime import datetime
-from time import strptime, strftime
 
 from django import template
 

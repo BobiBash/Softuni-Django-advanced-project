@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
+{% load time_until %}
 
 {% block content %}
-<div class="flex gap-8">
+<div class="grid grid-cols-4 gap-8">
     {% for appointment in appointments %}
             <div class="flex flex-col border rounded-sm p-4">
                 <p>Appointment with {{ appointment.vet.get_fullname }}</p>
                 <p>For {{ appointment.pet.name }}</p>
                 <p>On {{ appointment.slot.date }}</p>
                 <p>At {{ appointment.slot.time|date:"H:i" }}</p>
+                <p>Time until appointment: {{ appointment.slot.date_and_time|time_until }}</p>
             </div>
     {% endfor %}
 </div>

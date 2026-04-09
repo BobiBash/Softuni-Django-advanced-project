@@ -38,6 +38,13 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
+CELERY_BEAT_SCHEDULE = {
+    "cleanup-expired-appointments": {
+        "task": "appointments.tasks.clean_expired_appointments",
+        "schedule": 86400.0,
+    },
+}
+
 # Application definition
 
 AUTH_USER_MODEL = "accounts.PawMedicUser"

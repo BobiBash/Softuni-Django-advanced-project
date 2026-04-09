@@ -63,7 +63,12 @@ class VetSearchView(LoginRequiredMixin, View):
     def get(self, request):
         query = request.GET.get('search', '')
         print(query)
-        vets_found = VetProfile.objects.filter(Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query))
+        vets_found = (VetProfile
+                      .objects
+                      .filter
+                      (Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query))
+                      .exclude(is_published=False))
+
         paginator = Paginator(vets_found, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
