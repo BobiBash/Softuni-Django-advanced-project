@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
@@ -28,7 +29,7 @@ class VetProfile(models.Model):
     specialization = models.CharField(max_length=100)
     years_of_experience = models.IntegerField()
     bio = models.TextField()
-    photo = models.ImageField(upload_to='vet_photos/', blank=True, null=True)
+    photo = CloudinaryField('vet_photos', blank=True, null=True)
     is_published = models.BooleanField(default=False)
     slug = AutoSlugField(populate_from='get_fullname', unique=True)
 
