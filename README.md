@@ -4,6 +4,18 @@ A Django-based platform connecting pet owners with veterinarians. Pet owners can
 
 Built as a final project for the SoftUni Django Advanced course.
 
+🌐 **Live demo:** [pawmedic.azurewebsites.net](http://pawmedic-bpe4bwdba5gebvh5.swedencentral-01.azurewebsites.net)
+
+---
+
+## Screenshots
+
+|                                             | |
+|---------------------------------------------|---|
+| ![Home](![img_1.png](img_1.png))            | ![Vet directory](screenshots/vets.png) |
+| ![Vet profile](screenshots/vet-profile.png) | ![Appointments](screenshots/appointments.png) |
+| ![Forum](screenshots/forum.png)             | ![Pets](screenshots/pets.png) |
+
 ---
 
 ## Features
@@ -19,10 +31,10 @@ Built as a final project for the SoftUni Django Advanced course.
 **For vets**
 - Extended vet profile with photo, bio, and publish/unpublish toggle
 - Manage available appointment slots
-- Forum participation and tag management (via vet group permissions)
+- Forum participation
 
 **Platform**
-- Custom user model with owner and vet roles, group-assigned on registration
+- Custom user model with owner and vet roles
 - Signal-driven Celery email notification on appointment creation
 - Daily Celery Beat task to clean up expired appointment slots
 - DRF-powered vet search endpoint
@@ -48,7 +60,7 @@ Built as a final project for the SoftUni Django Advanced course.
 ## Project layout
 
 ```
-Softuni-Django-advanced-project/
+PawMedic/
 ├── PawMedic/           # Settings, root URLs, Celery bootstrap
 ├── accounts/           # Users, vet profiles, auth, groups, password reset
 ├── appointments/       # Scheduling, booking, cleanup task
@@ -74,7 +86,7 @@ Softuni-Django-advanced-project/
 
 ```bash
 git clone <repo-url>
-cd Softuni-Django-advanced-project
+cd PawMedic
 
 # Windows
 python -m venv .venv
@@ -101,9 +113,15 @@ cp .env.example .env
 
 ```env
 SECRET_KEY=your_django_secret_key
+DEBUG=True
 
+ALLOWED_HOSTS=127.0.0.1,localhost
+CSRF_TRUSTED_ORIGINS=http://127.0.0.1,http://localhost
+
+DB_NAME=pawmedic_db
 DB_USER=postgres
 DB_PASSWORD=your_postgres_password
+DB_HOST=127.0.0.1
 DB_PORT=5432
 
 REDIS_URL=redis://localhost:6379/0
@@ -132,7 +150,7 @@ python manage.py createsuperuser
 ### 6. Run the development server
 
 ```bash
-python manage.py runserver
+python manage.py tailwind runserver
 ```
 
 App is available at `http://127.0.0.1:8000/`.
@@ -196,17 +214,21 @@ Returns published vets matching the search term. Requires a non-empty `search` p
 
 ## Roles and permissions
 
-Two groups are created automatically after migration: `Vets` and `Pet Owners`. Users are assigned to a group on registration based on their role field.
+The project uses three permission groups: `Vets`, `Pet Owners`, and `Moderators`. Groups are created manually via the admin panel and assigned to users automatically on registration based on their role.
 
-| Permission | Pet Owners | Vets |
-|---|---|---|
-| Pet CRUD | ✓ | view only |
-| Appointment booking | ✓ | |
-| Appointment slot management | | ✓ |
-| Vet profile management | | ✓ |
-| Forum CRUD | ✓ | ✓ |
-| Forum tag management | | ✓ |
-| Issue report review | superuser / manual grant | superuser / manual grant |
+| Permission | Pet Owners | Vets | Moderators |
+|---|---|---|---|
+| Pet CRUD | ✓ | view only | |
+| Favorite vet CRUD | ✓ | | |
+| Appointment booking | ✓ | | view only |
+| Appointment slot CRUD | | ✓ | view only |
+| Vet profile | view only | ✓ | view only |
+| Forum posts CRUD | ✓ | ✓ | ✓ |
+| Forum comments CRUD | ✓ | ✓ | ✓ |
+| Forum tag management | | | ✓ |
+| Report issue | ✓ | ✓ | |
+| View/delete reported issues | | | ✓ |
+| View users | | | ✓ |
 
 ---
 
@@ -249,6 +271,52 @@ The project currently has 24 discovered tests across the app modules. Note: `tes
 | `/vets/` | Vet directory, detail pages, search, API |
 | `/appointments/` | Appointments and vet schedule management |
 | `/forum/` | Posts, comments, tags |
+
+---
+
+## Deployment
+
+PawMedic is deployed on Azure App Service, backed by Azure Database for PostgreSQL Flexible Server and Azure Cache for Redis. Media files are stored on Cloudinary. Deployments are automated via GitHub Actions on every push to `main`.
+
+### Services used
+
+| Service | Purpose |
+|---|---|
+| Azure App Service (B1) | Hosts the Django application |
+| Azure Database for PostgreSQL Flexible Server (B1ms) | Production database |
+| Azure Cache for Redis (C0 Basic) | Celery broker and result backend |
+| Azure App Service (B1) — worker | Runs the Celery worker and beat scheduler |
+| Cloudinary | Media file storage |
+
+### Required environment variables
+
+Set these in Azure App Service → Configuration → Application settings:
+
+| Variable | Description |
+|---|---|
+| `SECRET_KEY` | Django secret key |
+| `DEBUG` | Set to `False` in production |
+| `ALLOWED_HOSTS` | App Service domain |
+| `CSRF_TRUSTED_ORIGINS` | Full URL of App Service domain |
+| `DB_NAME` | PostgreSQL database name |
+| `DB_USER` / `DB_PASSWORD` / `DB_HOST` / `DB_PORT` | PostgreSQL connection details |
+| `REDIS_URL` | Azure Cache for Redis connection string |
+| `EMAIL_HOST_USER` / `EMAIL_HOST_PASSWORD` | Gmail SMTP credentials |
+| `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | Cloudinary credentials |
+
+### Startup command
+
+```bash
+python manage.py collectstatic --noinput && python manage.py migrate --noinput && gunicorn PawMedic.wsgi --workers 4 --bind 0.0.0.0:8000
+```
+
+### Celery worker
+
+The Celery worker and beat scheduler are deployed as a separate Azure App Service pointing to the same codebase, with the startup command:
+
+```bash
+celery -A PawMedic worker --beat --loglevel=info
+```
 
 ---
 
