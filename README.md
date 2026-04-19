@@ -10,11 +10,14 @@ Built as a final project for the SoftUni Django Advanced course.
 
 ## Screenshots
 
-|                                             | |
-|---------------------------------------------|---|
-| ![Home](![img_1.png](img_1.png))            | ![Vet directory](screenshots/vets.png) |
-| ![Vet profile](screenshots/vet-profile.png) | ![Appointments](screenshots/appointments.png) |
-| ![Forum](screenshots/forum.png)             | ![Pets](screenshots/pets.png) |
+<img width="1845" height="891" alt="image" src="https://github.com/user-attachments/assets/ec7bce25-e23b-44bf-9fae-11c173c1b1e1" />
+
+---
+<img width="1842" height="877" alt="image" src="https://github.com/user-attachments/assets/af7d7b31-7f43-4a4b-ac45-702f5235a3b0" />
+
+---
+<img width="1837" height="893" alt="image" src="https://github.com/user-attachments/assets/4ff6cd9b-9580-4c8c-9be1-e47dd04cdd9e" />
+
 
 ---
 
